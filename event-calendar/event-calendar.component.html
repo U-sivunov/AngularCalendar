@@ -1,0 +1,120 @@
+<div class="event-calendar-wrapper">
+  <div class="event-calendar-main" id="event-calendar-main">
+    <div class="event-calendar-year-title">
+      <div class="year-btn-wrapper">
+        <div class="arrow-btn year-arrow-btn prev-arrow-btn" (click)="currentMonth$.next(currentMonth.subtract(1, 'year'))"></div>
+      </div>
+      <div class="year-title-wrapper">
+        {{this.currentMonth.format('YYYY')}}
+      </div>
+      <div class="year-btn-wrapper">
+        <div class="arrow-btn year-arrow-btn next-arrow-btn" (click)="currentMonth$.next(currentMonth.add(1, 'year'))"></div>
+      </div>
+    </div>
+    <div class="event-calendar-navigation-slider">
+      <div class="month-same-size">
+        <div class="month-btn-wrapper" (click)="currentMonth$.next(currentMonth.subtract(1, 'month'))">
+          <div class="arrow-btn month-arrow-btn prev-arrow-btn"></div>
+          <div class="month-title"> {{this.currentMonth.clone().subtract(1, 'month').format('MMMM')}}</div>
+        </div>
+      </div>
+      <div class="month-title current-month-title month-same-size">{{this.currentMonth.format('MMMM')}}</div>
+      <div class="month-same-size">
+        <div class="month-btn-wrapper next-month-title" (click)="currentMonth$.next(currentMonth.add(1, 'month'))">
+          <div class="month-title">{{this.currentMonth.clone().add(1, 'month').format('MMMM')}}  </div>
+          <div class="arrow-btn month-arrow-btn next-arrow-btn"></div>
+        </div>
+      </div>
+    </div>
+    <div class="event-calendar-navigation-tabs">
+      <div *ngFor="let tab of getTabs()" class="tab" (click)="changeTab(tab)" [ngClass]="{activeTab: tabIsActive(tab)}">
+        <p>{{getTabValue(tab)}}</p>
+      </div>
+      <div class="search-field"></div>
+    </div>
+    <div class="event-calendar-content">
+      <div *ngIf="tabIsActive('MONTH')" class="content-month">
+        <div class="days-of-week">
+          <div *ngFor="let day of daysOfWeek" class="day-of-week">{{day}}</div>
+        </div>
+        <div *ngFor="let week of getWeeks()" class="week">
+          <div *ngFor="let day of getDays(week)" class="day">
+            <div class="day-title" [ngClass]="{dayTitleCenter: !isDayInCurrentMonth(day)}">{{getDayTitle(day)}}</div>
+            <div class="day-body" [ngClass]="{weekend: isWeekend(day)}">
+              <div *ngIf="expandedDay !== day" class="flex">
+                <div *ngFor="let item of getDayItems(day)" class="event-item" (click)="onItemClick(item)"
+                     [ngClass]="{selectedItem: item.id === selectedItemId, standartHeight: getAllDayItems(day).length === 2}">
+                  <div *ngIf="getDayItems(day).length === 1" class="itemDoubleString"
+                       [ngClass]="{selectedItemString: item.id === selectedItemId}">
+                    {{item.event.name}}
+                  </div>
+                  <div *ngIf="getDayItems(day).length === 2" class="itemString"
+                       [ngClass]="{selectedItemString: item.id === selectedItemId}">
+                    {{item.event.name}}
+                  </div>
+                  <div *ngIf="getDayItems(day).length === 1" class="itemString"
+                       [ngClass]="{selectedItemString: item.id === selectedItemId}">
+                    {{item.event.event_type}}
+                  </div>
+                  <div *ngIf="getDayItems(day).length === 1" class="itemString">
+                    {{item.event.venue}}
+                  </div>
+                  <div class="time-string" [ngClass]="{selectedItemTime: item.id === selectedItemId}">
+                    {{getTimeString(item)}}
+                  </div>
+                </div>
+
+                <div *ngIf="getExtraItems(day).length && expandedDay !== day" class="extra-string" (click)="showExtraItems($event, day)">
+                  {{getExtraString(getExtraItems(day).length)}}
+                </div>
+              </div>
+              <div *ngIf="expandedDay === day" class="allItemsContainer">
+                <div *ngFor="let item of getAllDayItems(day)" class="event-item extra-event-item standartHeight" (click)="onItemClick(item)"
+                     [ngClass]="{selectedItem: item.id === selectedItemId}">
+                  <div  class="itemString" [ngClass]="{selectedItemString: item.id === selectedItemId}">
+                    {{item.event.name}}
+                  </div>
+                  <div class="time-string" [ngClass]="{selectedItemTime: item.id === selectedItemId}">
+                    {{getTimeString(item)}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="tabIsActive('WEEK')">
+        Неделя
+      </div>
+      <div *ngIf="tabIsActive('DAY')">
+        День
+      </div>
+    </div>
+    <div *ngIf="expandedDay" class="overlay" (click)="expandedDay = null"></div>
+  </div>
+  <div class="event-calendar-infobar-wrapper" [ngClass]="{'infobar-opened': selectedEvent, 'infobar-closed': !selectedEvent}">
+    <div *ngIf="selectedEvent" class="event-calendar-infobar">
+      <div class="infobar-close-button" (click)="closeInfoBar()"></div>
+      <div class="infobar-flex-wrapper">
+        <div class="infobar-header">Информация о событии</div>
+        <ng-scrollbar>
+          <div class="infobar-rows info-scroll-content">
+            <div *ngFor="let field of eventFields" class="infobar-row">
+              <div class="infobar-text infobar-property">{{field.title}}:</div>
+              <div *ngIf="field.eventField === 'date_start'" class="infobar-text infobar-value">{{getEventDatePeriod()}}</div>
+              <div *ngIf="field.eventField === 'time_start'" class="infobar-text infobar-value">{{getTimeString(selectedEvent)}}</div>
+              <div *ngIf="field.eventField !== 'date_start' && field.eventField !== 'time_start'"
+                   class="infobar-text infobar-value">{{selectedEvent[field.eventField]}}</div>
+            </div>
+          </div>
+          <div class="infobar-info-property">
+            Информация о событии:
+          </div>
+          <div>
+            <div class="infobar-info-text">{{selectedEvent.info}}</div>
+          </div>
+        </ng-scrollbar>
+      </div>
+    </div>
+  </div>
+</div>

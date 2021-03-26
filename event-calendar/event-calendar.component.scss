@@ -1,0 +1,400 @@
+.event-calendar-wrapper {
+  display: flex;
+  max-width: 80vw;
+  margin: 0 auto;
+  padding-top: 5vw;
+}
+
+.event-calendar-main {
+  height: 36.3vw;
+  color: #666666;
+  overflow: hidden;
+  flex-grow: 1;
+
+  .event-calendar-year-title {
+    font-size: 1.5vw;
+    line-height: 1.5vw;
+    color: #333333;
+    text-align: center;
+  }
+
+  .arrow-btn {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+  }
+
+  .year-btn-wrapper {
+    cursor: pointer;
+    height: 1.6vw;
+    width: 1.6vw;
+    display: inline-block;
+    position: relative;
+
+    &:hover {
+      background-color: #DDDDDD;
+      border-radius: 50%;
+    }
+  }
+
+  .year-arrow-btn {
+    height: 1.2vw;
+    width: 1.2vw;
+    position: relative;
+    top: 0.1vw;
+  }
+
+  .year-title-wrapper {
+    display: inline-block;
+  }
+
+  .month-arrow-btn {
+    height: 0.75vw;
+    width: 0.75vw;
+  }
+
+  .prev-arrow-btn {
+    background-image: url("~src/assets/images/gray-arrow.png");
+    background-size: contain;
+    transform: rotate(180deg);
+  }
+
+  .next-arrow-btn {
+    background-image: url("~src/assets/images/gray-arrow.png");
+    background-size: contain;
+  }
+
+  .month-btn-wrapper {
+    cursor: pointer;
+    width: fit-content;
+
+    &:hover {
+      background-color: #DDDDDD;
+      border-radius: 1vw;
+    }
+  }
+
+  .month-same-size {
+    width: 8vw;
+  }
+
+  .event-calendar-navigation-slider {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1vw;
+    text-transform: capitalize;
+    margin: 0.5vw 0;
+  }
+
+  .month-title {
+    display: inline-block;
+    margin: 0 0.4vw;
+  }
+
+  .next-month-title {
+    float: right;
+  }
+
+  .current-month-title {
+    text-align: center;
+  }
+
+  .event-calendar-navigation-tabs {
+    display: flex;
+    height: 2.2vw;
+  }
+
+  .tab {
+    width: 8.4vw;
+    height: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    margin-right: 0.2vw;
+    background-color: #F5F5F5;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    p {
+      margin-top: 0.6vw;
+    }
+  }
+
+  .activeTab {
+    background-color: white;
+    border: 0.05vw solid #F5F5F5;
+  }
+
+  .search-field {
+    flex-grow: 10;
+    height: 100%;
+    background-color: #F5F5F5;
+  }
+
+  .days-of-week {
+    display: flex;
+    height: 1.1vw;
+    font-weight: 700;
+
+    :not(:last-child) {
+      margin-right: 0.1vw;
+    }
+  }
+
+  .day-of-week {
+    text-align: center;
+    flex-grow: 1;
+    background-color: #E5E5E5;
+  }
+
+  .week {
+    display: flex;
+    height: 5.8vw;
+  }
+
+  .day {
+    flex-grow: 1;
+    border: 0.1vw solid #E1E1E1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 7vw;
+  }
+
+  .day-title {
+    background-color: #F2F2F2;
+    text-transform: capitalize;
+    flex-basis: 1.1vw;
+    padding-left: 0.5vw;
+  }
+
+  .dayTitleCenter {
+    text-align: center;
+    padding-left: 0;
+  }
+
+  .day-body {
+    height: 80%;
+  }
+
+  .weekend {
+    background-color: #EDEDED;
+  }
+
+  .event-item {
+    margin: 0.03vw;
+    border: 0.1vw solid #00ADED;
+    border-radius: 0.2vw;
+    background: linear-gradient(180deg, #E8F8FD, #D8F2FC);
+    flex: 1 1 0;
+    font-size: 0.6vw;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &:hover {
+      background: #E0E0E0;
+
+      .time-string {
+        color: #179DD1;
+      }
+
+      .itemString {
+        color: black;
+      }
+
+      .itemDoubleString {
+        color: black;
+      }
+    }
+  }
+
+  .selectedItem {
+    box-shadow: 0 0 0.782vw rgba(0, 0, 0, .45);
+    z-index: 10;
+  }
+
+  .selectedItemString {
+    color: black;
+  }
+
+  .selectedItemTime {
+    font-weight: 700;
+  }
+
+  .itemString {
+    padding-left: 0.4vw;
+    max-height: 0.8vw;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .itemDoubleString {
+    padding-left: 0.4vw;
+    max-height: 1.6vw;
+    overflow: hidden;
+  }
+
+  .time-string {
+    padding-left: 0.4vw;
+    font-style: italic;
+    color: #00ADED;
+  }
+
+  .extra-string {
+    font-size: 0.6vw;
+    text-align: center;
+    color: #666666;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      width: 0.3vw;
+      height: 0.3vw;
+      border-top: 0.3vw solid #666666;
+      border-left: 0.3vw solid transparent;
+      border-right: 0.3vw solid transparent;
+      display: inline-block;
+      left: 0.5vw;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    &:hover {
+      color: black;
+
+      &::after {
+        border-top: 0.3vw solid black;
+      }
+    }
+  }
+
+  .flex {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .standartHeight {
+    height: 1.9vw;
+    flex: 0 0 1.9vw;
+    justify-content: space-around;
+  }
+
+  .allItemsContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 20;
+    max-height: 30vw;
+    overflow: auto;
+    width: 100%;
+  }
+}
+
+.overlay {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  z-index: 15;
+  background-color: black;
+  opacity: 0.1;
+  bottom: 100%;
+}
+
+.event-calendar-infobar-wrapper {
+  transition: width 0.5s ease-in-out, margin-left 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.infobar-opened {
+  width: 20vw;
+  margin-left: 1.5vw;
+}
+
+.infobar-closed {
+  width: 0;
+  margin-left: 0;
+}
+
+.event-calendar-infobar {
+  width: 20vw;
+  height: 32.3vw;
+  border: 0.02vw solid #EEEEEE;
+  margin-top: 4vw;
+  box-sizing: border-box;
+  padding-bottom: 1vw;
+}
+
+.infobar-header {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1vw;
+  margin: 0.5vw;
+  font-weight: 700;
+}
+
+.infobar-close-button {
+  background-image: url("~src/assets/images/cross.png");
+  background-size: contain;
+  height: 1.5vw;
+  width: 1.5vw;
+  float: right;
+  margin: 0.4vw;
+  z-index: 3;
+  position: relative;
+
+  &:hover {
+    filter: brightness(0);
+    cursor: pointer;
+  }
+}
+
+.infobar-row {
+  margin: 1vw 1.4vw;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.infobar-property {
+  flex-basis: 30%;
+  font-weight: 700;
+}
+
+.infobar-value {
+  flex-basis: 65%;
+  color: #666666;
+}
+
+.infobar-info {
+  margin: 0 1.4vw;
+}
+
+.infobar-info-property {
+  font-weight: 700;
+  margin-left: 1.4vw;
+  margin-bottom: 0.5vw;
+}
+
+.infobar-info-text {
+  margin-left: 1.4vw;
+  margin-right: 1.4vw;
+  white-space: pre-line;
+  color: #666666;
+}
+
+.infobar-flex-wrapper {
+  position: relative;
+  bottom: 2.3vw;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
